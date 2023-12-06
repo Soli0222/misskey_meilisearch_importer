@@ -12,7 +12,7 @@ program
 	.version('1.0.0')
 	.option('--config <file>', 'path of Misskey config file (.config/default.yml)')
 	.option('--id <aid>', 'starts processing from the specified "aid" sequence')
-	.option('--batch-size <size>', 'number of notes to import in one process', 1000)
+	.option('--batch-size <size>', 'number of notes to import in one process', 60000)
 	.parse();
 
 const options = program.opts();
@@ -79,7 +79,7 @@ const importNotes = async (connection, id) => {
 	console.log('Preparing for import...');
 	const { total } = await connection.createQueryBuilder()
 		.from('note')
-		.where("(text IS NOT NULL OR cw IS NOT NULL) AND visibility IN ('home', 'public')")
+		.where("text IS NOT NULL")
 		.andWhere(() => {
 			switch (meilisearchIndexScope) {
 				case 'global': return 'true';
@@ -98,7 +98,7 @@ const importNotes = async (connection, id) => {
 	while (true) {
 		notes = await connection.createQueryBuilder()
 			.from('note')
-			.where("(text IS NOT NULL OR cw IS NOT NULL) AND visibility IN ('home', 'public')")
+			.where("text IS NOT NULL")
 			.andWhere(() => {
 				switch (meilisearchIndexScope) {
 					case 'global': return 'true';
