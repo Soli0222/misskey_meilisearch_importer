@@ -46,7 +46,7 @@ const bar = new cliProgress.SingleBar({
 });
 
 const meilisearch = new MeiliSearch({
-	host: `${config.meilisearch.ssl ? 'https' : 'http' }://${config.meilisearch.host}:${config.meilisearch.port}`,
+	host: `${config.meilisearch.ssl ? 'https' : 'http'}://${config.meilisearch.host}${config.meilisearch.port ? ':' + config.meilisearch.port : ''}`,
 	apiKey: config.meilisearch.apiKey,
 });
 
